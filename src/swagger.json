@@ -8,13 +8,21 @@
             "email": "renan.reyc@gmail.com"
         }
     },
+    "tags": [
+        {
+            "name": "users",
+            "description": "API at users"
+        }
+    ],
     "paths": {
         "/users": {
             "post": {
-                "tags": ["User"],
-                "summary": "Create a user",
+                "tags": ["Users"],
+                "summary": "Create an user",
                 "description": "Create a new user",
                 "requestBody": {
+                    "required": true,
+                    "description": "Campo obrigatório para criação de um usuário.",
                     "content": {
                         "application/json": {
                             "schema": {
@@ -37,15 +45,299 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "User Created"
+                        "description": "User Created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "admin": {
+                                            "type": "boolean",
+                                            "enum": [
+                                                ""
+                                            ]
+                                        },
+                                        "id":{
+                                            "type": "string"
+                                        },
+                                        "name":{
+                                            "type": "string"
+                                        },
+                                        "email":{
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "string"
+                                        },
+                                        "updated_at": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "admin": false,
+                                        "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                        "name": "Rocketseat",
+                                        "email": "oi@rocketseat.com.br",
+                                        "created_at": "2021-03-28T22:30:10.992Z",
+                                        "updated_at": "2021-03-28T22:30:10.992Z"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "User already exists"
+                        "description": "User already exists",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                        "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "This email is already use."
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             },
             "get": {
-                
+                "tags": ["Users"],
+                "summary": "List all users",
+                "description": "List all users",
+                "parameters": [{
+                    "name": "user_id",
+                    "in": "header",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "Success",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                          "type": "string"
+                                        },
+                                        "updated_at": {
+                                          "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": [
+                                    {
+                                      
+                                        "admin": false,
+                                        "id": "d32e9e4e-43cd-4f64-a393-4f0158c9e348",
+                                        "name": "Renan Rey",
+                                        "email": "renan@email.com",
+                                        "created_at": "2022-09-29T10:20:43.081Z",
+                                        "updated_at": "2022-09-29T10:20:43.081Z"
+                                    }                                    
+                                ]
+                            }
+                        }
+                    }
+                },
+                "500": {
+                    "description": "Falha na requisição",
+                    "content": {
+                        "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                "error": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                        }
+                    }
+                }
+            }
+            }
+        }, 
+        "/users/{userId}":{
+            "get":{
+                "tags": ["Users"],
+                "summary": "Returns the user by ID",
+                "description": "Returns the searched user",
+                "parameters": {
+                    "in": "path",
+                    "name": "user_id",
+                    "required": true,
+                    "description": "ID by unique User",
+                    "schema":{
+                        "type": "string",
+                        "item": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "item": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "email": {
+                                                "type": "string"
+                                            },
+                                            "created_at": {
+                                                "type": "string"
+                                              },
+                                              "updated_at": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "example": {
+                                            "admin": false,
+                                            "id": "a32d8169-56ef-4d48-a2c1-a595ff748116",
+                                            "name": "Rocketseat",
+                                            "email": "oi@rocketseat.com.br",
+                                            "created_at": "2021-03-28T22:30:10.992Z",
+                                            "updated_at": "2021-03-28T22:30:10.992Z"
+                                          
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Usuário não encontrado.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                        },
+                                        "example": {
+                                        "error": "User not found."
+                                        }
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}/admin": {
+            "patch": {
+                    "tags": ["Users"],
+                    "summary": "Turn user in admin",
+                    "parameters": [
+                        {
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Operação realizada com sucesso.",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "admin": {
+                                                "type": "boolean",
+                                                "enum": [
+                                                ""
+                                                ]
+                                                },
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                },
+                                                "created_at": {
+                                                    "type": "string"
+                                                },
+                                                "updated_at": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "example": {
+                                                "admin": true,
+                                                "id": "cbf62820-897e-4326-83c1-78df16c5723c",
+                                                "name": "Rocketseat",
+                                                "email": "oi@rocketseat.com.br",
+                                                "created_at": "2021-03-29T10:18:14.127Z",
+                                                "updated_at": "2021-03-29T10:18:23.138Z"
+                                            }
+                                        }
+                                    }
+                                }
+                                },
+                                    "404": {
+                                    "description": "Usuário não encontrado.",
+                                    "content": {
+                                        "application/json": {
+                                        "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                        "type": "string"
+                                        }
+                                    },
+                                    "example": {
+                                        "error": "User not found."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
